@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Калькулятор месячного платежа</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Калькулятор месячного платежа</h1>
+        </div>
+        
+        <div class="content">
+            <div class="form-group">
+                <label for="carPriceInput">Сумма кредита (₽)</label>
+                <div class="input-container">
+                    <input type="number" id="carPriceInput" value="1800000" min="1000" step="1000">
+                </div>
+            </div>
+            
+            <table class="table">
+                <tr>
+                    <th>Параметр</th>
+                    <th>Значение</th>
+                </tr>
+                <tr>
+                    <td>Сумма кредита</td>
+                    <td id="carPrice">1,800,000 ₽</td>
+                </tr>
+                <tr>
+                    <td>Срок кредита</td>
+                    <td id="months">36 месяцев</td>
+                </tr>
+                <tr>
+                    <td>Процентная ставка</td>
+                    <td id="percent">7%</td>
+                </tr>
+                <tr>
+                    <td>Минимальная сумма</td>
+                    <td>9,000 ₽</td>
+                </tr>
+                <tr>
+                    <td>Статус проверки</td>
+                    <td><span class="status" id="status">OK</span></td>
+                </tr>
+            </table>
+            
+            <div class="calculation">
+                <h3>Формула расчета:</h3>
+                <p>monthly_payment = car_price / months * percent</p>
+                <p id="calcStep1">monthly_payment = 1,800,000 / 36 * 0.07</p>
+                <p id="calcStep2">monthly_payment = 50,000 * 0.07</p>
+                <p id="finalCalculation">monthly_payment = 3,500 ₽</p>
+            </div>
+            
+            <div class="result" id="result">
+                Ежемесячный платеж: 3,500 ₽
+            </div>
+        </div>
+        
+        <div class="footer">
+            Расчет произведен автоматически на основе предоставленных данных
+        </div>
+    </div>
+
+    <script>
+        // Функция для расчета месячного платежа
+        function calculateMonthlyPayment(carPrice, months, percent) {
+            // Используем toFixed(2) для избежания проблем с плавающей точкой
+            return parseFloat((carPrice / months * percent).toFixed(2));
+        }
+        
+        // Функция для форматирования числа с разделителями тысяч
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+        
+        // Функция для обновления расчетов
+        function updateCalculations() {
+            // Получаем значение из поля ввода
+            const money = parseFloat(document.getElementById('carPriceInput').value) || 1800000;
+            const months = 36;
+            const percent = 0.07; // Процентная ставка 7%
+            const minAmount = 9000;
+            
+            // Проверка условия
+            let result = '';
+            if (money > minAmount) {
+                result = 'ok';
+            } else {
+                result = 'no';
+            }
+            
+            // Обновляем таблицу
+            document.getElementById('carPrice').textContent = formatNumber(money) + ' ₽';
+            document.getElementById('months').textContent = months + ' месяцев';
+            document.getElementById('percent').textContent = '7%'; // Фиксированное отображение 7%
+            
+            // Обновляем статус
+            const statusElement = document.getElementById('status');
+            if (result === 'ok') {
+                statusElement.textContent = 'Одобрено';
+                statusElement.className = 'status status-ok';
+                
+                // Рассчитываем и отображаем платеж
+                const monthlyPayment = calculateMonthlyPayment(money, months, percent);
+                document.getElementById('calcStep1').textContent = 
+                    `monthly_payment = ${formatNumber(money)} / ${months} * 0.07`;
+                document.getElementById('calcStep2').textContent = 
+                    `monthly_payment = ${formatNumber(money/months)} * 0.07`;
+                document.getElementById('finalCalculation').textContent = 
+                    `monthly_payment = ${formatNumber(monthlyPayment)} ₽`;
+                document.getElementById('result').innerHTML = 
+                    `Ежемесячный платеж: <strong>${formatNumber(monthlyPayment)} ₽</strong>`;
+            } else {
+                statusElement.textContent = 'Отклонено';
+                statusElement.className = 'status status-no';
+                document.getElementById('calcStep1').textContent = 'Сумма слишком мала для расчета';
+                document.getElementById('calcStep2').textContent = '';
+                document.getElementById('finalCalculation').textContent = '';
+                document.getElementById('result').innerHTML = 'Недостаточно средств для оформления кредита';
+            }
+        }
+        
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', updateCalculations);
+        
+        // Обновление при изменении суммы кредита
+        document.getElementById('carPriceInput').addEventListener('input', updateCalculations);
+    </script>
+</body>
+</html>

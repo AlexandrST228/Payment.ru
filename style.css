@@ -1,0 +1,212 @@
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f7fa;
+            color: #333;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: 500;
+        }
+        .content {
+            padding: 30px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 2px rgba(102, 126, 234, 0.2);
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .table th, .table td {
+            border: 1px solid #e0e0e0;
+            padding: 12px 15px;
+            text-align: left;
+        }
+        .table th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: #495057;
+        }
+        .table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .result {
+            background-color: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+        .status {
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .status-ok {
+            background-color: #e8f5e9;
+            color: #2e7d32;
+        }
+        .status-no {
+            background-color: #ffebee;
+            color: #c62828;
+        }
+        .calculation {
+            background-color: #fff8e1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #ffeb3b;
+        }
+        .calculation p {
+            margin: 8px 0;
+            font-family: monospace;
+        }
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+            border-top: 1px solid #eee;
+        }
+        .input-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+        .input-container::after {
+            content: '₽';
+            position: absolute;
+            right: 12px;
+            color: #666;
+            pointer-events: none;
+        }
+              .calculation {
+            display: none; /* Скрытие блока с формулой */
+            background-color: #fff8e1;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border: 1px solid #ffeb3b;
+            font-size: 14px;
+        }
+      
+        /* Адаптивность для мобильных устройств */
+        @media (max-width: 480px) {
+            .container {
+                margin: 10px;
+                border-radius: 8px;
+            }
+            
+            .content {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 16px;
+            }
+            
+            .table {
+                font-size: 13px;
+            }
+            
+            .table th, .table td {
+                padding: 8px 6px;
+            }
+            
+            .result {
+                font-size: 15px;
+                padding: 10px;
+            }
+            
+            .calculation {
+                padding: 10px;
+            }
+            
+            .calculation h3 {
+                font-size: 14px;
+            }
+            
+            .calculation p {
+                font-size: 13px;
+            }
+            
+            .form-group input {
+                padding: 10px;
+                font-size: 15px;
+            }
+            
+            .input-container::after {
+                font-size: 13px;
+                right: 10px;
+            }
+        }
+        
+        /* Адаптивность для планшетов */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .container {
+                margin: 20px;
+            }
+            
+            .content {
+                padding: 25px;
+            }
+            
+            .header h1 {
+                font-size: 20px;
+            }
+            
+            .table {
+                font-size: 15px;
+            }
+            
+            .table th, .table td {
+                padding: 11px 10px;
+            }
+            
+            .result {
+                font-size: 17px;
+            }
+            
+            .calculation {
+                font-size: 15px;
+            }
+        }

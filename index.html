@@ -1,135 +1,118 @@
-
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Калькулятор месячного платежа</title>
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Планировщик бюджета</title>
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Калькулятор месячного платежа</h1>
-        </div>
-        
-        <div class="content">
-            <div class="form-group">
-                <label for="carPriceInput">Сумма кредита (₽)</label>
-                <div class="input-container">
-                    <input type="number" id="carPriceInput" value="1800000" min="1000" step="1000">
-                </div>
-            </div>
-            
-            <table class="table">
-                <tr>
-                    <th>Параметр</th>
-                    <th>Значение</th>
-                </tr>
-                <tr>
-                    <td>Сумма кредита</td>
-                    <td id="carPrice">1,800,000 ₽</td>
-                </tr>
-                <tr>
-                    <td>Срок кредита</td>
-                    <td id="months">36 месяцев</td>
-                </tr>
-                <tr>
-                    <td>Процентная ставка</td>
-                    <td id="percent">7%</td>
-                </tr>
-                <tr>
-                    <td>Минимальная сумма</td>
-                    <td>9,000 ₽</td>
-                </tr>
-                <tr>
-                    <td>Статус проверки</td>
-                    <td><span class="status" id="status">OK</span></td>
-                </tr>
-            </table>
-            
-            <div class="calculation">
-                <h3>Формула расчета:</h3>
-                <p>monthly_payment = car_price / months * percent</p>
-                <p id="calcStep1">monthly_payment = 1,800,000 / 36 * 0.07</p>
-                <p id="calcStep2">monthly_payment = 50,000 * 0.07</p>
-                <p id="finalCalculation">monthly_payment = 3,500 ₽</p>
-            </div>
-            
-            <div class="result" id="result">
-                Ежемесячный платеж: 3,500 ₽
-            </div>
-        </div>
-        
+        <h1>💰 Планировщик бюджета</h1>
+        <p class="subtitle">Узнайте, сколько вы можете тратить на еду, транспорт и другие нужды, чтобы накопить на отпуск.</p>
+
+        <form id="budgetForm">
+            <label>Зарплата (₽):</label>
+            <input type="number" id="salary" value="50000" required>
+
+            <label>Аренда (₽):</label>
+            <input type="number" id="rent" value="15000" required>
+
+            <label>Кредит (₽):</label>
+            <input type="number" id="loan" value="4400" required>
+
+            <label>Коммуналка (₽):</label>
+            <input type="number" id="utilities" value="2000" required>
+
+            <label>Интернет/связь (₽):</label>
+            <input type="number" id="internet" value="300" required>
+
+            <label>Цель (₽):</label>
+            <input type="number" id="savingsGoal" value="55000" required>
+
+            <label>Срок (мес):</label>
+            <input type="number" id="months" value="3" min="1" required>
+        </form>
+
+        <button onclick="calculateBudget()">Рассчитать бюджет</button>
+
+        <div id="result"></div>
+
         <div class="footer">
-            Расчет произведен автоматически на основе предоставленных данных
+            © <script>document.write(new Date().getFullYear())</script> Бюджет-планировщик | Мечтай о море 🌴
         </div>
     </div>
 
     <script>
-        // Функция для расчета месячного платежа
-        function calculateMonthlyPayment(carPrice, months, percent) {
-            // Используем toFixed(2) для избежания проблем с плавающей точкой
-            return parseFloat((carPrice / months * percent).toFixed(2));
-        }
-        
-        // Функция для форматирования числа с разделителями тысяч
-        function formatNumber(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
-        
-        // Функция для обновления расчетов
-        function updateCalculations() {
-            // Получаем значение из поля ввода
-            const money = parseFloat(document.getElementById('carPriceInput').value) || 1800000;
-            const months = 36;
-            const percent = 0.07; // Процентная ставка 7%
-            const minAmount = 9000;
-            
-            // Проверка условия
-            let result = '';
-            if (money > minAmount) {
-                result = 'ok';
-            } else {
-                result = 'no';
+        function calculateBudget() {
+            // Получаем значения
+            const salary = parseFloat(document.getElementById('salary').value);
+            const rent = parseFloat(document.getElementById('rent').value);
+            const loan = parseFloat(document.getElementById('loan').value);
+            const utilities = parseFloat(document.getElementById('utilities').value);
+            const internet = parseFloat(document.getElementById('internet').value);
+            const savingsGoal = parseFloat(document.getElementById('savingsGoal').value);
+            const months = parseInt(document.getElementById('months').value);
+
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '';
+
+            // Проверка
+            if (salary <= 0 || months <= 0) {
+                resultDiv.innerHTML = `<div class="error">Пожалуйста, корректно заполните все поля.</div>`;
+                return;
             }
-            
-            // Обновляем таблицу
-            document.getElementById('carPrice').textContent = formatNumber(money) + ' ₽';
-            document.getElementById('months').textContent = months + ' месяцев';
-            document.getElementById('percent').textContent = '7%'; // Фиксированное отображение 7%
-            
-            // Обновляем статус
-            const statusElement = document.getElementById('status');
-            if (result === 'ok') {
-                statusElement.textContent = 'Одобрено';
-                statusElement.className = 'status status-ok';
-                
-                // Рассчитываем и отображаем платеж
-                const monthlyPayment = calculateMonthlyPayment(money, months, percent);
-                document.getElementById('calcStep1').textContent = 
-                    `monthly_payment = ${formatNumber(money)} / ${months} * 0.07`;
-                document.getElementById('calcStep2').textContent = 
-                    `monthly_payment = ${formatNumber(money/months)} * 0.07`;
-                document.getElementById('finalCalculation').textContent = 
-                    `monthly_payment = ${formatNumber(monthlyPayment)} ₽`;
-                document.getElementById('result').innerHTML = 
-                    `Ежемесячный платеж: <strong>${formatNumber(monthlyPayment)} ₽</strong>`;
-            } else {
-                statusElement.textContent = 'Отклонено';
-                statusElement.className = 'status status-no';
-                document.getElementById('calcStep1').textContent = 'Сумма слишком мала для расчета';
-                document.getElementById('calcStep2').textContent = '';
-                document.getElementById('finalCalculation').textContent = '';
-                document.getElementById('result').innerHTML = 'Недостаточно средств для оформления кредита';
+
+            const fixedExpenses = rent + loan + utilities + internet;
+            if (fixedExpenses >= salary) {
+                resultDiv.innerHTML = `<div class="error">Обязательные расходы превышают доход. Невозможно откладывать.</div>`;
+                return;
             }
+
+            const requiredMonthlySavings = savingsGoal / months;
+            const availableForLiving = salary - fixedExpenses - requiredMonthlySavings;
+
+            if (availableForLiving < 0) {
+                const deficit = Math.abs(availableForLiving).toFixed(0);
+                resultDiv.innerHTML = `<div class="error">Невозможно накопить ${savingsGoal.toLocaleString()} ₽ за ${months} мес. Нужно ещё ${deficit} ₽ в месяц.</div>`;
+                return;
+            }
+
+            // Распределяем оставшееся
+            const limits = {
+                food: availableForLiving * 0.5,
+                transport: availableForLiving * 0.2,
+                personal: availableForLiving * 0.15,
+                misc: availableForLiving * 0.15
+            };
+
+            let resultHTML = `
+                <div class="result">
+                    <h2>✅ Цель достижима!</h2>
+                    <p>Вы можете тратить в месяц на:</p>
+                    <div class="limits">
+                        <div class="limit-item">
+                            Еда
+                            <span class="amount">${limits.food.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₽</span>
+                        </div>
+                        <div class="limit-item">
+                            Транспорт
+                            <span class="amount">${limits.transport.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₽</span>
+                        </div>
+                        <div class="limit-item">
+                            Личные расходы
+                            <span class="amount">${limits.personal.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₽</span>
+                        </div>
+                        <div class="limit-item">
+                            Развлечения
+                            <span class="amount">${limits.misc.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₽</span>
+                        </div>
+                    </div>
+                    <p><strong>Всего на "жизнь":</strong> ${availableForLiving.toFixed(0).replace(/\B(?=(\d{3})+(?!\d))/g, " ")} ₽</p>
+                </div>
+            `;
+
+            resultDiv.innerHTML = resultHTML;
         }
-        
-        // Инициализация при загрузке страницы
-        document.addEventListener('DOMContentLoaded', updateCalculations);
-        
-        // Обновление при изменении суммы кредита
-        document.getElementById('carPriceInput').addEventListener('input', updateCalculations);
     </script>
 </body>
 </html>
